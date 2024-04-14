@@ -18,12 +18,12 @@ int main(void)
         if (strlen(password) >= 32 )
         {
             puts("Password needs to be less than 32 characters long!");
-            return EXIT_FAILURE;
+            continue;
         }
         if (containsWhitespace(password))
         {
             puts("Password cannot contain whitespaces!");
-            return EXIT_FAILURE;
+            continue;
         }
 
         // Check password strength
@@ -45,12 +45,25 @@ int main(void)
 */
 char* getPassword(void)
 {
-    char* password = malloc(64 * sizeof(char));
-    printf("Enter your password (needs to be less than 64 characters): ");
-    // fgets() over scanf() for safer input handling and prevention of buffer overflow.
-    fgets(password, 64, stdin);
-    // remove \n, replace with null.
-    password[strcspn(password, "\n")] = '\0';
+    char* password;
+    while (true)
+    {
+        password = malloc(64 * sizeof(char));
+        printf("Enter your password (needs to be less than 64 characters): ");
+        // fgets() over scanf() for safer input handling and prevention of buffer overflow.
+        fgets(password, 64, stdin);
+        if (password[0] == '\n') 
+        {
+            printf("Password cannot be carriage return/new line, try again!\n");
+            continue;
+        }
+        else
+        {
+            // remove \n, replace with null.
+            password[strcspn(password, "\n")] = '\0';
+            break;
+        }
+    }
     return password;
 }
 
@@ -78,7 +91,7 @@ char* checkStrength(const char* str)
     // Allocate memory for message
     char* msg = malloc(24 * sizeof(char));
 
-    int strengthCounter = 0;
+    int strengthScore = 0;
     const bool hasLength = strlen(str) >= 10;
     bool hasDigit = false, hasLower = false, hasUpper = false, hasSpecialChar = false;
     int length = strlen(str);
@@ -103,30 +116,29 @@ char* checkStrength(const char* str)
             (str[i]>=123 &&str[i]<=126))
         {
             hasSpecialChar = true;
-            break;
         }
     }
 
-    // Calculate and Rate strength base on strengthCounter
-    if (hasLength) strengthCounter += 20;
-    if (hasDigit) strengthCounter += 20;
-    if (hasLower) strengthCounter += 20;
-    if (hasUpper) strengthCounter += 20;
-    if (hasSpecialChar) strengthCounter += 20;
+    // Calculate and Rate strength base on strengthScore
+    if (hasLength) strengthScore += 30;
+    if (hasDigit) strengthScore += 10;
+    if (hasLower) strengthScore += 10;
+    if (hasUpper) strengthScore += 25;
+    if (hasSpecialChar) strengthScore += 25;
 
-    if (strengthCounter == 100)
+    if (strengthScore == 100)
     {
         sprintf(msg, "VERY STRONG");
     }
-    else if (strengthCounter >= 80)
+    else if (strengthScore >= 75)
     {
         sprintf(msg, "STRONG");
     }
-    else if (strengthCounter >= 60)
+    else if (strengthScore >= 50)
     {
         sprintf(msg, "MODERATE");
     }
-    else if (strengthCounter >= 40)
+    else if (strengthScore >= 40)
     {
         sprintf(msg, "WEAK");
     }
