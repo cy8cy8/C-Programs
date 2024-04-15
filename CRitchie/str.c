@@ -10,10 +10,5 @@ int main ()
         putchar(c);
     }
 
-    // Custom string length function
-    long len;
-    for (len = 0; getchar() != EOF; len++);
-    printf("Length of string = %ld\n", len);
-
     return 0;
 }

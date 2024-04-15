@@ -18,4 +18,10 @@ Cmd to compile: `cc hello.c`
 
 <br>
 
-## 
+## Tips
+
+Use `scanf()` for strings without whitespace, otherwise use `fgets()`
+
+Enum is better than `#define`
+
+Use `<ctype.h>` for char checking.

@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include "randpassgen.h"
 
 int main()
 {
+
     // Ask user for the length of the password to be generated.
-    int length = getLength();
+    short length = getLength();
     if (length == 0 || length > 64)
     {
         return 0;
@@ -30,9 +32,9 @@ int main()
 }
 
 // Function to get length from user.
-unsigned getLength()
+short getLength()
 {
-    int length;
+    short length;
     printf("Enter the desired length for your new password (must be be more than 10 characters long): ");
     scanf("%d", &length);
     if (length < 10)
@@ -53,10 +55,10 @@ unsigned getLength()
 }
 
 // Function to generate password.
-void getPassword(int length)
+void getPassword(short length)
 {
     printf("Your password = ");
-    for (int i = 0; i < length; i++)
+    for (short i = 0; i < length; i++)
     {
         // Create a random printable ASCII char: english alphabet (upper/lower case), numbers and symbols.
         // Note: rand() is repeatable, DO NOT use it if unique chars need to be generated every time the program is run!

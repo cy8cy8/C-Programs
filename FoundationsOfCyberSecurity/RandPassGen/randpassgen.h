@@ -1,2 +1,2 @@
-extern void getPassword(int length);
-extern unsigned getLength();
+extern void getPassword(short length);
+extern short getLength();
