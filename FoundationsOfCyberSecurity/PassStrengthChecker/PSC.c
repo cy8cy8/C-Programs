@@ -5,6 +5,10 @@
 #include <stdbool.h>
 #include "PSC.h"
 
+// Symbolic Constants to avoid magic numbers.
+#define MSGLEN 24
+#define PASSLEN 64
+
 /**
  * Password strength checker, based on rules at each level.
  * The rules focus on strength scores: adequate length, digit, upper and lowercase letters, special characters.
@@ -13,26 +17,39 @@
 int main(void) 
 {
     while(true){
-        char* password = getPassword();
-        // Some input validation
-        if (strlen(password) >= 32 )
+        printf("Press enter to continue, q to quit: ");
+        int enterOrQuit = getchar();
+        if (enterOrQuit == '\n') {
+            char* password = getPassword();
+            // Some input validation
+            if (strlen(password) >= 32 )
+            {
+                puts("Password needs to be less than 32 characters long!");
+                continue;
+            }
+            if (containsWhitespace(password))
+            {
+                puts("Password cannot contain whitespaces!");
+                continue;
+            }
+
+            // Check password strength
+            char* msg = checkStrength(password);
+            printf("%s\n", msg);
+
+            // Free allocated memory
+            free(password);
+            free(msg);
+        }
+        else if (enterOrQuit == 'q')
         {
-            puts("Password needs to be less than 32 characters long!");
+            break;
+        }
+        else 
+        {
+            puts("Please press enter to continue or q to quit!");
             continue;
         }
-        if (containsWhitespace(password))
-        {
-            puts("Password cannot contain whitespaces!");
-            continue;
-        }
-
-        // Check password strength
-        char* msg = checkStrength(password);
-        printf("%s\n", msg);
-
-        // Free allocated memory
-        free(password);
-        free(msg);
     }
     return EXIT_SUCCESS;
 }
@@ -48,10 +65,10 @@ char* getPassword(void)
     char* password;
     while (true)
     {
-        password = malloc(64 * sizeof(char));
+        password = malloc(PASSLEN * sizeof(char));
         printf("Enter your password (needs to be less than 64 characters): ");
         // fgets() over scanf() for safer input handling and prevention of buffer overflow.
-        fgets(password, 64, stdin);
+        fgets(password, PASSLEN, stdin);
         if (password[0] == '\n') 
         {
             printf("Password cannot be carriage return/new line, try again!\n");
@@ -89,10 +106,10 @@ int containsWhitespace(const char* password)
 char* checkStrength(const char* str)
 {
     // Allocate memory for message
-    char* msg = malloc(24 * sizeof(char));
+    char* msg = malloc(MSGLEN * sizeof(char));
 
     int strengthScore = 0;
-    const bool hasLength = strlen(str) >= 10;
+    const bool hasLength = strlen(str) >= 12;
     bool hasDigit = false, hasLower = false, hasUpper = false, hasSpecialChar = false;
     int length = strlen(str);
     
@@ -120,21 +137,21 @@ char* checkStrength(const char* str)
     }
 
     // Calculate and Rate strength base on strengthScore
-    if (hasLength) strengthScore += 30;
-    if (hasDigit) strengthScore += 10;
-    if (hasLower) strengthScore += 10;
-    if (hasUpper) strengthScore += 25;
-    if (hasSpecialChar) strengthScore += 25;
+    if (hasLength) strengthScore += 20;
+    if (hasDigit) strengthScore += 20;
+    if (hasLower) strengthScore += 20;
+    if (hasUpper) strengthScore += 20;
+    if (hasSpecialChar) strengthScore += 20;
 
     if (strengthScore == 100)
     {
         sprintf(msg, "VERY STRONG");
     }
-    else if (strengthScore >= 75)
+    else if (strengthScore >= 80)
     {
         sprintf(msg, "STRONG");
     }
-    else if (strengthScore >= 50)
+    else if (strengthScore >= 60)
     {
         sprintf(msg, "MODERATE");
     }
