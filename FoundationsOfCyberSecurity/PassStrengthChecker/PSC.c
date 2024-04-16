@@ -17,9 +17,10 @@
 int main(void) 
 {
     while(true){
-        printf("Press enter to continue, q to quit: ");
-        int enterOrQuit = getchar();
-        if (enterOrQuit == '\n') {
+        // printf("Press enter to continue, q to quit: ");
+        // int enterOrQuit = getchar();
+        // if (enterOrQuit == '\n') 
+        // {
             char* password = getPassword();
             // Some input validation
             if (strlen(password) >= 32 )
@@ -41,16 +42,16 @@ int main(void)
             free(password);
             free(msg);
         }
-        else if (enterOrQuit == 'q')
-        {
-            break;
-        }
-        else 
-        {
-            puts("Please press enter to continue or q to quit!");
-            continue;
-        }
-    }
+        // else if (enterOrQuit == 'q')
+        // {
+        //     break;
+        // }
+        // else 
+        // {
+            // puts("Please press enter to continue or q to quit!");
+        //     continue;
+        // }
+    // }
     return EXIT_SUCCESS;
 }
 

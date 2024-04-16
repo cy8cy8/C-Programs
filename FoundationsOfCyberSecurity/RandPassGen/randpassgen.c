@@ -9,7 +9,8 @@ int main()
 {
 
     // Ask user for the length of the password to be generated.
-    short length = getLength();
+    printf("\n");
+    int length = getLength();
     if (length == 0 || length > 64)
     {
         return 0;
@@ -27,14 +28,14 @@ int main()
         printf("pid = %d\n", (getpid() / 2));
     }
     getPassword(length);
-
+    printf("\n");
     return EXIT_SUCCESS;
 }
 
 // Function to get length from user.
-short getLength()
+int getLength()
 {
-    short length;
+    int length;
     printf("Enter the desired length for your new password (must be be more than 10 characters long): ");
     scanf("%d", &length);
     if (length < 10)
@@ -55,10 +56,10 @@ short getLength()
 }
 
 // Function to generate password.
-void getPassword(short length)
+void getPassword(int length)
 {
     printf("Your password = ");
-    for (short i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
         // Create a random printable ASCII char: english alphabet (upper/lower case), numbers and symbols.
         // Note: rand() is repeatable, DO NOT use it if unique chars need to be generated every time the program is run!

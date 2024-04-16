@@ -8,7 +8,6 @@
 int main ()
 {
     // How to actually get string input
-    
 
     return 0;
 }
